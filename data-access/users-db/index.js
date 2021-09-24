@@ -3,30 +3,28 @@ const makeUser = require('../../models/user/index');
 const serialize = require('./serializer');
 var mongoose = require('mongoose');
 
-let listUsers = () => {
+let listUsers = (options = {}) => {
 	return User.find({})
-		.then(serialize)
+		.then(element => serialize(element, options))
 }
 
-let findUser = (prop, val) => {
+let findUser = (prop, val, options = {}) => {
 	if (prop === 'id') {
 		prop = '_id'
 		if (!mongoose.Types.ObjectId.isValid(val)) {
 			throw new Error('id invalid');
 		}
 	}
-	return User.find({ [prop]: val })
-		.then(resp => {
-			return serialize(resp[0])
-		})
+	return User.findOne({ [prop]: val })
+		.then(element => serialize(element, options))
 }
 
-let findUserBy = (prop, val) => {
+let findUserBy = (prop, val, options = {}) => {
 	return User.find({ [prop]: val })
-		.then(serialize)
+		.then(element => serialize(element, options))
 }
 
-let addUser = (info) => {
+let addUser = (info, options = {}) => {
 	delete info.id;
 	let data = makeUser(info)
 	let newUser = {
@@ -36,20 +34,21 @@ let addUser = (info) => {
 		active: data.isActive(),
 	}
 	return User.create(newUser)
-		.then(serialize)
+		.then(element => serialize(element, options))
 }
 
-let updateUser = (id, info) => {
+let updateUser = (id, info, options = {}) => {
 	let data = makeUser({ id, ...info })
 	let updateUser = {
 		name: data.getName(),
 		lastname: data.getLastName(),
 		email: data.getEmail(),
 		active: data.isActive(),
+		token: data.getToken(),
 	}
 
 	return User.findOneAndUpdate({ _id: id }, updateUser, { new: true })
-		.then(serialize)
+		.then(element => serialize(element, options))
 }
 
 

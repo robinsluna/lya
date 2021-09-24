@@ -14,12 +14,15 @@ users.index = (req, res, next) => {
 users.show = (req, res, next) => {
 	usersDb.findUser('id', req.params.id)
 		.then(data => {
+			if (!data.active) {
+				return res.status(400).send({ error: 'inactive user!' });
+			}
 			res.send(data)
 		}).catch(next)
 }
 
 users.create = (req, res, next) => {
-	usersDb.addUser(req.body)
+	usersDb.addUser({ ...req.body, active: false })
 		.then(data => {
 			res.send(data)
 		})

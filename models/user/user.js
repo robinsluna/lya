@@ -3,16 +3,18 @@ const buildMakeUser = (userValidator) => {
 		name,
 		lastname,
 		email,
-		active
+		active,
+		token,
 	} = {}) => {
-		let { error } = userValidator({ name, lastname, email, active });
+		let { error } = userValidator({ name, lastname, email, active, token });
 		if (error) throw new Error(error);
 
 		return {
 			getName: () => name,
 			getLastName: () => lastname,
 			getEmail: () => email,
-			isActive: () => active
+			isActive: () => active,
+			getToken: () => token
 		};
 	};
 };

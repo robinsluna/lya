@@ -1,22 +1,25 @@
-const _serialize = (user) => {
-	return {
+const _serialize = (user, options = {}) => {
+	const data = {
 		'id': user._id,
 		'name': user.name,
 		'lastname': user.lastname,
 		'email': user.email,
-		'active': user.active,
-		'fullname': user.fullname
+		'active': user.active
 	};
+	if (options.withToken) {
+		data.token = user.token;
+	}
+	return data;
 };
 
-const serializer = (data) => {
+const serializer = (data, options = {}) => {
 	if (!data) {
 		return null;
 	}
 	if (Array.isArray(data)) {
-		return data.map(_serialize);
+		return data.map(element => _serialize(element, options));
 	}
-	return _serialize(data);
+	return _serialize(data, options);
 }
 
 module.exports = serializer;

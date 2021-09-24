@@ -5,6 +5,7 @@ var UserSchema = new mongoose.Schema({
 	lastname: { type: String, required: true },
 	email: { type: String, required: true },
 	active: { type: Boolean, required: false, default: false },
+	token: { type: String, required: false },
 }, { timestamps: true });
 
 UserSchema
