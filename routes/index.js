@@ -26,15 +26,15 @@ const users = require('../controllers/users');
  *         active:
  *           type: boolean
  *           description: usuario activo.
- *           example: true
+ *           example: false
  *     User:
  *       allOf:
  *         - type: object
  *           properties:
  *             id:
- *               type: integer
- *               description: The user ID.
- *               example: 0
+ *               type: string
+ *               description: id del usuario
+ *               example: 0000x00
  *         - $ref: '#/components/schemas/NewUser'
  * 
  */
@@ -100,5 +100,55 @@ router.get('/users/:id', users.show);
  */
 router.post('/users', users.create);
 
+/**
+ * @swagger
+ * /users/{id}:
+ *   put:
+ *     description: Crea un usuario
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: id del usuario 
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/NewUser'
+ *     responses:
+ *       200:
+ *         description: un usuario
+ *         content:
+ *           application/json:
+ *             schema:
+ *                 $ref: '#/components/schemas/User'
+ */
+router.put('/users/:id', users.update);
+
+
+/**
+ * @swagger
+ * /users/{id}/active:
+ *   patch:
+ *     description: Crea un usuario
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: id del usuario 
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: un usuario
+ *         content:
+ *           application/json:
+ *             schema:
+ *                 $ref: '#/components/schemas/User'
+ */
+router.patch('/users/:id/active', users.activate);
 
 module.exports = router;

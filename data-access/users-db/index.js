@@ -20,23 +20,14 @@ let findUser = (prop, val) => {
 			return serialize(resp[0])
 		})
 }
+
 let findUserBy = (prop, val) => {
 	return User.find({ [prop]: val })
 		.then(serialize)
 }
 
 let addUser = (info) => {
-	let data = makeUser(info)
-	let newUser = {
-		name: data.getName(),
-		lastname: data.getLastName(),
-		email: data.getEmail()
-	}
-	return User.create(newUser)
-		.then(serialize)
-}
-
-let updateUser = (id, info) => {
+	delete info.id;
 	let data = makeUser(info)
 	let newUser = {
 		name: data.getName(),
@@ -44,7 +35,20 @@ let updateUser = (id, info) => {
 		email: data.getEmail(),
 		active: data.isActive(),
 	}
-	return User.findOneAndUpdate({ _id: id }, newUser)
+	return User.create(newUser)
+		.then(serialize)
+}
+
+let updateUser = (id, info) => {
+	let data = makeUser({ id, ...info })
+	let updateUser = {
+		name: data.getName(),
+		lastname: data.getLastName(),
+		email: data.getEmail(),
+		active: data.isActive(),
+	}
+
+	return User.findOneAndUpdate({ _id: id }, updateUser, { new: true })
 		.then(serialize)
 }
 
@@ -71,6 +75,7 @@ let dropAllUsers = () => {
 module.exports = {
 	listUsers,
 	findUser,
+	findUserBy,
 	addUser,
 	updateUser,
 	deleteUser,

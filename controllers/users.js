@@ -12,30 +12,41 @@ users.index = (req, res, next) => {
 }
 
 users.show = (req, res, next) => {
-	console.log(req.params.id);
 	usersDb.findUser('id', req.params.id)
 		.then(data => {
 			res.send(data)
-		}).catch( error =>{
-			next(error);
-		})
+		}).catch(next)
 }
 
 users.create = (req, res, next) => {
 	usersDb.addUser(req.body)
 		.then(data => {
-			console.log(data);
 			res.send(data)
 		})
-		.catch( error =>{
-			next(error);
-		})
+		.catch(next)
 }
+
+users.update = (req, res, next) => {
+	usersDb.updateUser(req.params.id, req.body)
+		.then(data => {
+			res.send(data)
+		})
+		.catch(next)
+}
+
+users.activate = (req, res, next) => {
+	usersDb.updateUser(req.params.id, { active: true })
+		.then(data => {
+			res.send(data)
+		})
+		.catch(next)
+}
+
 
 
 users.delete = (req, res, next) => {
 	usersDb.deleteUser('id', req.params.id)
 		.then(data => {
 			res.send(data)
-		})
+		}).catch(next)
 }

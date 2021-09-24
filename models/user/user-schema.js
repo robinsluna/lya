@@ -1,8 +1,9 @@
-const joi = require("joi");
+const Joi = require("joi");
 
-module.exports = joi.object().keys({
-	name: joi.string().required(),
-	lastname: joi.string().required(),
-	email: joi.string().required().email({ tlds: { allow: false } }),
-	active: joi.boolean().not().required()
+module.exports = Joi.object().keys({
+	id: Joi.string().optional(),
+	name: Joi.string().when('id', { is: Joi.exist(), then: Joi.valid() }),
+	lastname: Joi.string().when('id', { is: Joi.exist(), then: Joi.valid() }),
+	email: Joi.string().email({ tlds: { allow: false } }).when('id', { is: Joi.exist(), then: Joi.valid() }),
+	active: Joi.boolean().optional()
 });
