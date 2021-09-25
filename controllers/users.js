@@ -48,7 +48,7 @@ users.activate = (req, res, next) => {
 
 
 users.delete = (req, res, next) => {
-	usersDb.deleteUser('id', req.params.id)
+	usersDb.deleteUser(req.params.id)
 		.then(data => {
 			res.send(data)
 		}).catch(next)

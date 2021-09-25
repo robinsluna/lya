@@ -59,12 +59,7 @@ let deleteUser = (id) => {
 				id: resp._id.toString(),
 				status: 'success'
 			}
-		})
-		.catch(() => {
-			return {
-				status: 'fail'
-			}
-		})
+		});
 }
 
 let dropAllUsers = () => {
