@@ -1,9 +1,10 @@
 const express = require('express')
 const router = express.Router()
-
+const { isAuthenticatedMiddleware } = require("../middleware/auth");
 const users = require('../controllers/users');
 const auth = require('../controllers/auth');
-const { isAuthenticatedMiddleware } = require("../middleware/auth");
+const messagges = require('../controllers/messagges');
+
 
 
 /**
@@ -221,6 +222,21 @@ router.post('/authorization', auth.create);
  *         description: autenticacion exitosa
  */
 router.delete('/authorization', isAuthenticatedMiddleware, auth.delete);
+
+
+/**
+ * @swagger
+ * /messages/send:
+ *   post:
+ *     security:
+ *      - jwt: [] 
+ *     description: Envía un mensaje por MQTT
+ *     responses:
+ *       200:
+ *         description: enviado
+ */
+router.post('/messages/send', isAuthenticatedMiddleware, messagges.send);
+
 
 
 module.exports = router;
